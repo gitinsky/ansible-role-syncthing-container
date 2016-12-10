@@ -1,0 +1,23 @@
+- name: chown syncthing volume
+  command: chown -R {{ syncthing_uid }} {{ ext_syncthing_volume }}
+
+- name: chown syncthing config volume
+  command: chown -R {{ syncthing_uid }} {{ ext_syncthing_config_volume }}
+
+- name: start a Syncthing container
+  docker:
+    image: gitinsky/syncthing:0.2.0
+    state: started
+    read_only: yes
+    hostname: "{{ ansible_hostname }}-syncthing"
+    ports:
+      - 22000:22000
+      - "{{ ext_syncthing_gui_port }}:8080"
+    volumes:
+      - "{{ ext_syncthing_volume }}:/home/syncthing/Sync"
+      - "{{ ext_syncthing_config_volume }}:/config"
+    name: syncthing
+    restart_policy: always
+    restart_policy_retry: 10000000
+  tags:
+    - docker
