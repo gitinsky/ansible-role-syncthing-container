@@ -6,17 +6,17 @@
 
 - name: start a Syncthing container
   docker:
-    image: gitinsky/syncthing:0.2.0
+    image: gitinsky/syncthing:0.2.1
     state: started
     read_only: yes
-    hostname: "{{ ansible_hostname }}-syncthing"
+    hostname: "{{ ansible_hostname }}-syncthing-{{ ext_syncthing_sync_port }}"
     ports:
-      - 22000:22000
+      - "{{ ext_syncthing_sync_port }}:22000"
       - "{{ ext_syncthing_gui_port }}:8080"
     volumes:
       - "{{ ext_syncthing_volume }}:/home/syncthing/Sync"
       - "{{ ext_syncthing_config_volume }}:/config"
-    name: syncthing
+    name: "syncthing-{{ ext_syncthing_sync_port }}"
     restart_policy: always
     restart_policy_retry: 10000000
   tags:
