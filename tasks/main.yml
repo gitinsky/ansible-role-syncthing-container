@@ -1,8 +1,8 @@
 - name: chown syncthing volume
-  command: chown {{ syncthing_uid }} {{ ext_syncthing_volume }}
+  file: state=directory owner="{{ syncthing_uid }}" dest="{{ ext_syncthing_volume }}"
 
 - name: chown syncthing config volume
-  command: chown -R {{ syncthing_uid }} {{ ext_syncthing_config_volume }}
+  file: state=directory owner="{{ syncthing_uid }}" dest="{{ ext_syncthing_config_volume }}"
 
 - name: start a Syncthing container
   docker:
